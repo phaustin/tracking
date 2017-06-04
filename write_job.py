@@ -5,6 +5,7 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from joblib import Parallel
+import time
 
 type_id={"condensed": 0,
          "condensed_edge": 1,
@@ -16,7 +17,7 @@ type_id={"condensed": 0,
          "core_shell": 7,
          "plume": 8}
 
-def convert_file(case_dir,the_file):
+def convert_file(time_start,case_dir,the_file):
     the_time=timestep.match(the_file).group(1)
     int_time=int(the_time)
     with h5py.File(the_file) as h5file:
@@ -33,13 +34,15 @@ def convert_file(case_dir,the_file):
         pq_name=f'{case_dir}/clouds_{the_time}.pq'
         df=pd.DataFrame.from_records(keep_recs,columns=['cloud_id','type','time_step','coord'])
         table = pa.Table.from_pandas(df)
-        print(f'wrote {pq_name}')
+        elapsed=time.perf_counter() - time_start
+        print(f'wrote {pq_name}, elapsed: {elapsed}')
         pq.write_table(table, pq_name,compression='snappy')
 
 timestep=re.compile('.*_(\d+)\.h5')
-case_dir='cgils_301'
+case_dir='cgils_300'
 in_pat=f'{case_dir}/*h5'
 the_files=sorted(glob.glob(in_pat))
-fun_list=[(convert_file,(case_dir,the_file),{}) for the_file in the_files]
+time_start=time.perf_counter()
+fun_list=[(convert_file,(time_start,case_dir,the_file),{}) for the_file in the_files]
 Parallel(n_jobs=25)(fun_list)
 
