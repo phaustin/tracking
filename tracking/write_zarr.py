@@ -1,3 +1,6 @@
+"""
+doc here
+"""
 import zarr
 from netCDF4 import Dataset
 import glob
@@ -26,17 +29,14 @@ if __name__ == "__main__":
     linebreaks=argparse.RawTextHelpFormatter
     descrip=__doc__.lstrip()
     parser = argparse.ArgumentParser(formatter_class=linebreaks,description=descrip)
-    parser.add_argument('src_dir',nargs='*',type=str,help='dir with nc files')
+    parser.add_argument('nprocs',type=int,help='number of processors')
+    parser.add_argument('src_dir',type=str,help='dir with nc files')
     args=parser.parse_args()
     src_dir=args.src_dir
+    print(f'here is src_dir: {src_dir}')
     nc_files=glob.glob(f'{src_dir}/*nc')
+    print(f'found {len(nc_files)} files to process')
     nc_files=sorted(nc_files)
     time_start=time.perf_counter()
     fun_list=[(convert_file,(time_start,src_dir,the_file),{}) for the_file in nc_files]
-    Parallel(n_jobs=25)(fun_list)
-
-
-
-
-
-
+    Parallel(n_jobs=args.nprocs)(fun_list)
