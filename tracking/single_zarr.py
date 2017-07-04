@@ -7,9 +7,13 @@ from .read_meta import dump_meta
 from pathlib import Path
 
 def convert_file(nc_file,zarr_dir):
+    """
+    this converts all variables in a netcdf file to zarr
+    no chunksize is set and no metadata is written
+    """
     with Dataset(nc_file) as ncin:
         store = zarr.DirectoryStore(zarr_dir)
-        the_group=zarr.hierarchy.open_group(store=store, mode='a', synchronizer=None, path=None)
+        the_group=zarr.hierarchy.open_group(store=store, mode='w', synchronizer=None, path=None)
         for varname in ncin.variables.keys():
             print(f'variable: {varname}')
             the_var=ncin.variables[varname][...]

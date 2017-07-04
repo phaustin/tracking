@@ -1,6 +1,7 @@
 from setuptools import setup
+
 setup(
     name = "tracking",
-    py_modules=['tracking'],
+    packages=['tracking'],
     version = "0.1",
 )
