@@ -1,5 +1,5 @@
 """
-doc here
+uses joblib to convert netcdf files to zarr
 """
 import zarr
 from netCDF4 import Dataset
