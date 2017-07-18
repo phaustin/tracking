@@ -20,7 +20,7 @@ def convert_file(nc_file,zarr_dir):
             if the_var.shape==4:
                 the_var=the_var.squeeze()
             the_group.array(varname,the_var,shape=the_var.shape,dtype=the_var.dtype,
-                            compressor=zarr.Blosc(cname='zlib', clevel=3),chunks=None)
+                            compressor=zarr.Blosc(cname='zlib', clevel=5),chunks=None)
 
 if __name__ == "__main__":
     import argparse
@@ -39,10 +39,10 @@ if __name__ == "__main__":
     for key,value in meta_dict['global'].items():
         the_group.attrs[key]=value
     del meta_dict['global']
-    for key,value in meta_dict['dimensions'].items():
+    for key,value in meta_dict['dimension_sizes'].items():
         dim_name=f'dim_{key}'
         the_group.attrs[dim_name]=value
-    del meta_dict['dimensions']
+    del meta_dict['dimension_sizes']
     for var,var_dict in meta_dict.items():
         for key, value in var_dict.items():
             the_group[var].attrs[key]=value
