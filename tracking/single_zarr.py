@@ -4,7 +4,7 @@ python -m tracking.single_zarr wrfout_d03_2016-01-04_09:00:00_post.nc
 """
 import zarr
 from netCDF4 import Dataset
-from read_meta import dump_meta
+from .read_meta import dump_meta
 from pathlib import Path
 
 def convert_file(nc_file,zarr_dir):
