@@ -1,5 +1,7 @@
 """
-add a continue index
+add a continued index
+
+python -m tracking.reindex_dask
 """
 #http://dask.pydata.org/en/latest/shared.html
 from dask.dataframe import read_parquet
@@ -69,7 +71,8 @@ if __name__ == "__main__":
     args=parser.parse_args()
     print(args.file_regex)
     regex_list=[]
-    for i in np.arange(50,63):
+    for i in np.arange(56,57):
+        print(f'working on timestep {i}')
         lead_zeros=f'{i:03d}'
         regex_list.append(f'pqfiles/*{lead_zeros}_*.parq')
     for item in regex_list:
