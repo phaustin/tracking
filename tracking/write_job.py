@@ -102,9 +102,11 @@ if __name__ == "__main__":
     case_dir='/Phil8TB/PhilShare/phil/gate_clusters/hdf5'
     in_pat=f'{case_dir}/*h5'
     the_files=sorted(glob.glob(in_pat))
+    for count,item in enumerate(the_files):
+        print(count,item)
     time_start=time.perf_counter()
-    fun_list=[(convert_file,(time_start,case_dir,the_file),{}) for the_file in the_files]
+    fun_list=[(convert_file,(time_start,case_dir,the_file),{}) for the_file in the_files[37:]]
     #fun_list=fun_list[:1]
     print(f'jobs: {fun_list}')
-    Parallel(n_jobs=len(fun_list),backend='multiprocessing')(fun_list)
+    Parallel(n_jobs=15,backend='multiprocessing')(fun_list)
 
